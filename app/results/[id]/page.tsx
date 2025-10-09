@@ -1,10 +1,11 @@
 // Results page - Comprehensive Contract Analysis
 
 import ResultsView from '@/components/ResultsView'
+import { API_URL } from '@/lib/config'
 
 async function getResults(id: string) {
   try {
-    const res = await fetch(`http://localhost:8000/results/${id}`, {
+    const res = await fetch(`${API_URL}/results/${id}`, {
       cache: 'no-store'
     })
     

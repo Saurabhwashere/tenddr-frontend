@@ -10,6 +10,7 @@ import {
   Clock, DollarSign, FileText, MessageCircle, Loader2,
   CheckCircle2, XCircle
 } from 'lucide-react'
+import { API_URL } from '@/lib/config'
 
 interface ResultsViewProps {
   contractId: string
@@ -51,7 +52,7 @@ export default function ResultsView({
     setLoading(true)
     
     try {
-      const res = await fetch(`http://localhost:8000/qa/${contractId}`, {
+      const res = await fetch(`${API_URL}/qa/${contractId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: currentQuestion })

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
 import { Upload, FileText, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { API_URL } from '@/lib/config'
 
 export default function FileUpload() {
   const [file, setFile] = useState<File | null>(null)
@@ -43,7 +44,7 @@ export default function FileUpload() {
     try {
       // Stage 1: Upload PDF
       setProgress(20)
-      const res = await fetch('http://localhost:8000/upload', {
+      const res = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         body: formData
       })
