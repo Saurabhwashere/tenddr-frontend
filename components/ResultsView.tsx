@@ -1,20 +1,24 @@
-// ResultsView component - Simple tabbed interface
+// ResultsView component - Simple tabbed interface for contract analysis
 
 'use client'
 import { useState } from 'react'
 import { Toaster, toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import Link from 'next/link'
 import { 
   FileCheck, AlertTriangle, Target, ClipboardCheck, 
   Clock, DollarSign, FileText, MessageCircle, Loader2,
-  CheckCircle2, XCircle
+  CheckCircle2, XCircle, ShieldAlert, Home, List, RefreshCw
 } from 'lucide-react'
 import { API_URL } from '@/lib/config'
+import RiskDashboard from './RiskDashboard'
+// PDF viewer removed
 
 interface ResultsViewProps {
   contractId: string
   filename: string
+  riskAnalysis?: any  // Risk analysis data from backend (optional)
   compliance_checklist: string
   clause_summaries: string
   scope_alignment: string
@@ -28,6 +32,7 @@ interface ResultsViewProps {
 export default function ResultsView({ 
   contractId, 
   filename, 
+  riskAnalysis,
   compliance_checklist,
   clause_summaries,
   scope_alignment,
@@ -38,12 +43,107 @@ export default function ResultsView({
   validation
 }: ResultsViewProps) {
   // Simple tab state - just a string!
-  const [activeTab, setActiveTab] = useState('compliance')
+  const [activeTab, setActiveTab] = useState('risks')  // Start with risk analysis
   
   // Q&A state with chat history
   const [question, setQuestion] = useState('')
   const [chatHistory, setChatHistory] = useState<Array<{question: string, answer: string}>>([])
   const [loading, setLoading] = useState(false)
+  
+  // Re-analyze state
+  const [reanalyzing, setReanalyzing] = useState(false)
+  const [reanalyzeProgress, setReanalyzeProgress] = useState(0)
+  
+  // PDF viewer removed - page jumping functionality disabled
+  
+  // Make [Page X] citations as non-clickable badges (PDF viewer removed)
+  const makePageLinksClickable = (text: string) => {
+    if (!text) return null
+    
+    // Split by [Page X] pattern but keep the pattern
+    const parts = text.split(/(\[Page \d+\])/g)
+    
+    return (
+      <div className="space-y-2">
+        {parts.map((part, idx) => {
+          // Check if this part is a page reference
+          const match = part.match(/\[Page (\d+)\]/)
+          if (match) {
+            const pageNum = parseInt(match[1])
+            return (
+              <span
+                key={idx}
+                className="inline-flex items-center mx-1 px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs font-medium"
+                title={`Page ${pageNum} reference`}
+              >
+                📄 Page {pageNum}
+              </span>
+            )
+          }
+          // Regular text - preserve line breaks
+          return part.split('\n').map((line, lineIdx) => (
+            <span key={`${idx}-${lineIdx}`}>
+              {line}
+              {lineIdx < part.split('\n').length - 1 && <br />}
+            </span>
+          ))
+        })}
+      </div>
+    )
+  }
+
+  const handleReanalyze = async () => {
+    if (!confirm('Re-analyze this contract?\n\nThis will:\n• Update all risk detections with improved logic\n• Re-chunk document with enhanced metadata\n• Refresh all analysis results\n\nThis may take 3-5 minutes.')) {
+      return
+    }
+    
+    setReanalyzing(true)
+    setReanalyzeProgress(5)
+    
+    // Start continuous progress simulation with progressive slowdown
+    const progressInterval = setInterval(() => {
+      setReanalyzeProgress(prev => {
+        // Progressive slowdown: Fast at start, slow near end
+        const increment = prev < 30 ? 5 :    // 5-30%: Fast (5% per second)
+                         prev < 60 ? 2 :    // 30-60%: Medium (2% per second)
+                         prev < 80 ? 1 :    // 60-80%: Slower (1% per second)
+                         prev < 95 ? 0.5 :  // 80-95%: Very slow (0.5% per second)
+                         0;                 // 95%+: Stop (wait for completion)
+        
+        return Math.min(prev + increment, 95) // Never go above 95% until done
+      })
+    }, 1000) // Update every second
+    
+    try {
+      // Make the actual API call (this takes 3-5 minutes with hybrid LLM)
+      const response = await fetch(`${API_URL}/reanalyze/${contractId}`, {
+        method: 'POST'
+      })
+      
+      // Stop the progress simulation
+      clearInterval(progressInterval)
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || 'Re-analysis failed')
+      }
+      
+      const result = await response.json()
+      
+      // Complete!
+      setReanalyzeProgress(100)
+      toast.success('Re-analysis complete! Refreshing results...')
+      
+      // Refresh page to show new results
+      setTimeout(() => window.location.reload(), 1500)
+      
+    } catch (error: any) {
+      clearInterval(progressInterval)
+      toast.error('Re-analysis failed: ' + error.message)
+      setReanalyzing(false)
+      setReanalyzeProgress(0)
+    }
+  }
 
   const handleAskQuestion = async () => {
     if (!question.trim()) return
@@ -117,6 +217,7 @@ export default function ResultsView({
 
   // Simple tabs configuration - easy to understand
   const tabs = [
+    { id: 'risks', name: 'Risk Analysis', icon: ShieldAlert, content: null, color: 'red' },  // Special tab for risk dashboard
     { id: 'compliance', name: 'Compliance', icon: FileCheck, content: compliance_checklist, color: 'blue' },
     { id: 'clauses', name: 'Clauses & Risks', icon: AlertTriangle, content: clause_summaries, color: 'purple' },
     { id: 'scope', name: 'Scope', icon: Target, content: scope_alignment, color: 'indigo' },
@@ -130,7 +231,25 @@ export default function ResultsView({
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <Toaster position="top-right" richColors />
       
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1920px] mx-auto">
+        {/* Navigation */}
+        <div className="flex justify-end gap-3 mb-6">
+          <Link 
+            href="/"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 border shadow-sm font-medium"
+          >
+            <Home className="w-4 h-4" />
+            Home
+          </Link>
+          <Link 
+            href="/contracts"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 border shadow-sm font-medium"
+          >
+            <List className="w-4 h-4" />
+            All Contracts
+          </Link>
+        </div>
+        
         {/* Header */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <div className="flex items-start justify-between">
@@ -144,29 +263,65 @@ export default function ResultsView({
               </p>
             </div>
             
-            {validation && (
-              <div className={`
-                flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
-                ${validation.status === 'COMPLETE' 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-yellow-100 text-yellow-800'
-                }
-              `}>
-                {validation.status === 'COMPLETE' ? (
-                  <CheckCircle2 className="w-5 h-5" />
-                ) : (
-                  <XCircle className="w-5 h-5" />
+            <div className="flex items-center gap-3">
+              {/* Re-analyze button with progress */}
+              <div className="flex flex-col gap-1">
+                <button
+                  onClick={handleReanalyze}
+                  disabled={reanalyzing}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  title="Re-run analysis with latest improvements"
+                >
+                  {reanalyzing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Re-analyzing... {reanalyzeProgress}%
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="w-4 h-4" />
+                      Re-analyze
+                    </>
+                  )}
+                </button>
+                
+                {/* Progress bar */}
+                {reanalyzing && (
+                  <div className="w-full bg-gray-200 rounded-full h-1.5">
+                    <div 
+                      className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                      style={{ width: `${reanalyzeProgress}%` }}
+                    />
+                  </div>
                 )}
-                <span>
-                  {validation.sections_completed}/{validation.total_sections} Complete
-                </span>
               </div>
-            )}
+
+              {validation && (
+                <div className={`
+                  flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+                  ${validation.status === 'COMPLETE' 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-yellow-100 text-yellow-800'
+                  }
+                `}>
+                  {validation.status === 'COMPLETE' ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : (
+                    <XCircle className="w-5 h-5" />
+                  )}
+                  <span>
+                    {validation.sections_completed}/{validation.total_sections} Complete
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Tab Navigation - Simple horizontal scroll on mobile */}
-        <div className="bg-white rounded-xl shadow-lg mb-6 overflow-x-auto">
+        {/* Single Column: Analysis Only */}
+        <div className="space-y-6">
+            {/* Tab Navigation - Simple horizontal scroll on mobile */}
+            <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
           <div className="flex border-b border-gray-200 p-2 gap-2">
             {tabs.map(tab => {
               const Icon = tab.icon
@@ -200,47 +355,65 @@ export default function ResultsView({
               key={tab.id}
               className={activeTab === tab.id ? 'block' : 'hidden'}
             >
-              <div className="flex items-center gap-2 mb-4">
-                {(() => {
-                  const Icon = tab.icon
-                  return <Icon className={`w-6 h-6 text-${tab.color}-600`} />
-                })()}
-                <h2 className={`text-2xl font-semibold text-${tab.color}-600`}>
-                  {tab.name}
-                </h2>
-              </div>
-              
-              <div className="prose prose-lg max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    // Headings - make them big and bold
-                    h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4 border-b-2 border-gray-200 pb-2" {...props} />,
-                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 mt-6 mb-3" {...props} />,
-                    h3: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-800 mt-4 mb-2" {...props} />,
-                    
-                    // Strong text (from **text**) - treat as subheadings
-                    strong: ({node, ...props}) => <strong className="text-lg font-bold text-gray-900 block mt-4 mb-2" {...props} />,
-                    
-                    // Lists - numbered and styled
-                    ul: ({node, ...props}) => <ul className="list-disc ml-6 mb-4 space-y-2" {...props} />,
-                    ol: ({node, ...props}) => <ol className="list-decimal ml-6 mb-4 space-y-2" {...props} />,
-                    li: ({node, ...props}) => <li className="text-gray-700 leading-relaxed" {...props} />,
-                    
-                    // Paragraphs - good spacing
-                    p: ({node, ...props}) => <p className="mb-3 text-gray-700 leading-relaxed" {...props} />,
-                    
-                    // Code/inline code
-                    code: ({node, ...props}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono" {...props} />
-                  }}
-                >
-                  {tab.content || 'No content available.'}
-                </ReactMarkdown>
-              </div>
+              {/* Special handling for Risk Analysis tab */}
+              {tab.id === 'risks' ? (
+                <>
+                  <div className="flex items-center gap-2 mb-6">
+                    <ShieldAlert className="w-6 h-6 text-red-600" />
+                    <h2 className="text-2xl font-semibold text-red-600">
+                      Automated Risk Detection
+                    </h2>
+                  </div>
+                  <RiskDashboard 
+                    riskAnalysis={riskAnalysis} 
+                  />
+                </>
+              ) : (
+                <>
+                  {/* Regular tabs with text content */}
+                  <div className="flex items-center gap-2 mb-4">
+                    {(() => {
+                      const Icon = tab.icon
+                      return <Icon className={`w-6 h-6 text-${tab.color}-600`} />
+                    })()}
+                    <h2 className={`text-2xl font-semibold text-${tab.color}-600`}>
+                      {tab.name}
+                    </h2>
+                  </div>
+                  
+                  <div className="prose prose-lg max-w-none">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        // Headings - make them big and bold
+                        h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4 border-b-2 border-gray-200 pb-2" {...props} />,
+                        h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 mt-6 mb-3" {...props} />,
+                        h3: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-800 mt-4 mb-2" {...props} />,
+                        
+                        // Strong text (from **text**) - treat as subheadings
+                        strong: ({node, ...props}) => <strong className="text-lg font-bold text-gray-900 block mt-4 mb-2" {...props} />,
+                        
+                        // Lists - numbered and styled
+                        ul: ({node, ...props}) => <ul className="list-disc ml-6 mb-4 space-y-2" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal ml-6 mb-4 space-y-2" {...props} />,
+                        li: ({node, ...props}) => <li className="text-gray-700 leading-relaxed" {...props} />,
+                        
+                        // Paragraphs - good spacing
+                        p: ({node, ...props}) => <p className="mb-3 text-gray-700 leading-relaxed" {...props} />,
+                        
+                        // Code/inline code
+                        code: ({node, ...props}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono" {...props} />
+                      }}
+                    >
+                      {tab.content || 'No content available.'}
+                    </ReactMarkdown>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
-
+        
         {/* Q&A Section with Chat History */}
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="flex items-center justify-between mb-6">
@@ -276,18 +449,9 @@ export default function ResultsView({
                   {/* Answer */}
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                     <p className="text-xs text-green-600 font-semibold mb-2">Answer:</p>
-                    <div className="text-sm text-gray-800 leading-relaxed prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          strong: ({node, ...props}) => <strong className="font-bold text-gray-900" {...props} />,
-                          p: ({node, ...props}) => <p className="mb-2" {...props} />,
-                          ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
-                          ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
-                        }}
-                      >
-                        {item.answer}
-                      </ReactMarkdown>
+                    <div className="text-sm text-gray-800 leading-relaxed">
+                      {/* Render answer with clickable page citations */}
+                      {makePageLinksClickable(item.answer)}
                     </div>
                   </div>
                 </div>
@@ -340,15 +504,7 @@ export default function ResultsView({
           </div>
         </div>
 
-        {/* Back Button */}
-        <div className="mt-6 text-center">
-          <a
-            href="/"
-            className="inline-block px-6 py-3 text-gray-600 hover:text-gray-900 font-medium transition-all"
-          >
-            ← Analyze Another Contract
-          </a>
-        </div>
+          </div>
       </div>
     </div>
   )

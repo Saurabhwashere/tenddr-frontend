@@ -36,36 +36,58 @@ export default function FileUpload() {
     
     setLoading(true)
     setStage('uploading')
-    setProgress(10)
+    setProgress(5)
     
     const formData = new FormData()
     formData.append('file', file)
     
+    // Start continuous progress simulation with progressive slowdown
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        // Progressive slowdown: Fast at start, slow near end
+        const increment = prev < 30 ? 5 :    // 5-30%: Fast (5% per second) 
+                         prev < 60 ? 2 :    // 30-60%: Medium (2% per second)
+                         prev < 80 ? 1 :    // 60-80%: Slower (1% per second)
+                         prev < 95 ? 0.5 :  // 80-95%: Very slow (0.5% per second)
+                         0;                 // 95%+: Stop (wait for completion)
+        
+        return Math.min(prev + increment, 95) // Never go above 95% until done
+      })
+    }, 1000) // Update every second
+    
     try {
-      // Stage 1: Upload PDF
-      setProgress(20)
+      // Update stage messages as time progresses
+      setTimeout(() => {
+        if (stage !== 'complete') setStage('processing')
+      }, 2000) // After 2 seconds
+      
+      setTimeout(() => {
+        if (stage !== 'complete') setStage('analyzing')
+      }, 10000) // After 10 seconds
+      
+      // Make the actual API call (this takes 3-5 minutes with hybrid LLM)
       const res = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         body: formData
       })
       
-      // Stage 2: Processing PDF
-      setStage('processing')
-      setProgress(40)
-      
-      // Stage 3: Running AI Analysis
-      setStage('analyzing')
-      setProgress(60)
-      
-      // Simulate incremental progress for 7 analyses
-      const progressInterval = setInterval(() => {
-        setProgress(prev => Math.min(prev + 3, 95))
-      }, 800)
-      
       const data = await res.json()
+      
+      // Stop the progress simulation
       clearInterval(progressInterval)
       
-      // Stage 4: Complete
+      // Check if this is a duplicate contract
+      if (data.is_duplicate) {
+        setProgress(100)
+        setStage('complete')
+        toast.info('Contract already uploaded!', {
+          description: 'Opening existing analysis...'
+        })
+        setTimeout(() => router.push(`/results/${data.id}`), 500)
+        return
+      }
+      
+      // Complete!
       setStage('complete')
       setProgress(100)
       
@@ -74,6 +96,7 @@ export default function FileUpload() {
       // Redirect to results page
       setTimeout(() => router.push(`/results/${data.id}`), 500)
     } catch (error) {
+      clearInterval(progressInterval)
       console.error('Upload error:', error)
       toast.error('Upload failed. Please try again.')
       setLoading(false)

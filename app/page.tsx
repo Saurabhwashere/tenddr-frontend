@@ -2,7 +2,8 @@
 
 import FileUpload from '@/components/FileUpload'
 import { Toaster } from 'sonner'
-import { CheckCircle2, AlertTriangle, MessageCircle, FileCheck, Clock, DollarSign } from 'lucide-react'
+import { CheckCircle2, AlertTriangle, MessageCircle, FileCheck, Clock, DollarSign, FileText } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -11,6 +12,17 @@ export default function Home() {
       <Toaster position="top-right" richColors />
       
       <div className="max-w-4xl mx-auto">
+        {/* Simple Navigation */}
+        <div className="flex justify-end mb-6">
+          <Link 
+            href="/contracts"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 border shadow-sm font-medium"
+          >
+            <FileText className="w-4 h-4" />
+            My Contracts
+          </Link>
+        </div>
+        
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-gray-900 mb-4 tracking-tight">

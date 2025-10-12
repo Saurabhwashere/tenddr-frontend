@@ -57,6 +57,7 @@ export default async function ResultsPage({ params }: { params: { id: string } }
       <ResultsView
         contractId={data.id}
         filename={data.filename}
+        riskAnalysis={data.risk_analysis}
         compliance_checklist={data.compliance_checklist}
         clause_summaries={data.clause_summaries}
         scope_alignment={data.scope_alignment}
