@@ -25,7 +25,7 @@ export default function RootLayout({
               <div className="flex justify-between items-center h-20">
                 <div className="flex items-center">
                   <Link href="/">
-                    <h1 className="text-3xl font-extrabold text-black cursor-pointer hover:text-gray-700 transition-all">
+                    <h1 className="text-3xl font-extrabold text-slate-900 cursor-pointer hover:text-blue-600 transition-all">
                       Tenddr
                     </h1>
                   </Link>
@@ -34,12 +34,12 @@ export default function RootLayout({
                 <div className="flex items-center gap-6">
                   <SignedOut>
                     <SignInButton mode="modal">
-                      <button className="px-5 py-2.5 text-base font-medium text-gray-700 hover:text-gray-900 transition-colors">
+                      <button className="px-5 py-2.5 text-base font-medium text-slate-700 hover:text-slate-900 transition-colors">
                         Sign In
                       </button>
                     </SignInButton>
                     <SignInButton mode="modal">
-                      <button className="px-6 py-3 bg-black text-white text-base font-semibold rounded-xl hover:bg-gray-800 transition-all">
+                      <button className="px-6 py-3 bg-blue-600 text-white text-base font-semibold rounded-xl hover:bg-blue-700 transition-all">
                         Get Started
                       </button>
                     </SignInButton>
@@ -47,13 +47,13 @@ export default function RootLayout({
                   <SignedIn>
                     <Link 
                       href="/upload"
-                      className="px-5 py-2.5 text-base font-medium text-gray-700 hover:text-black transition-colors"
+                      className="px-5 py-2.5 text-base font-medium text-slate-700 hover:text-blue-600 transition-colors"
                     >
                       Upload Contract
                     </Link>
                     <Link 
                       href="/contracts"
-                      className="px-5 py-2.5 text-base font-medium text-gray-700 hover:text-black transition-colors"
+                      className="px-5 py-2.5 text-base font-medium text-slate-700 hover:text-blue-600 transition-colors"
                     >
                       My Contracts
                     </Link>
