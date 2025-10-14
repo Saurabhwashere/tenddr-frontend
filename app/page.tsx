@@ -14,7 +14,7 @@ export default function LandingPage() {
             <div>
               <div className="inline-block mb-6">
                 <span className="px-5 py-2.5 bg-orange-100 text-black rounded-full text-sm font-semibold tracking-wide">
-                  For Construction Project Managers & Estimators
+                  Proactive AI Risk Reduction Platform for Construction
                 </span>
               </div>
               
