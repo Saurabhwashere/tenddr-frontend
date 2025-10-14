@@ -8,6 +8,9 @@ import Link from 'next/link'
 import { FileText, Home } from 'lucide-react'
 import ContractsList from '@/components/ContractsList'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 // Fetch all contracts from backend
 async function getContracts() {
   try {

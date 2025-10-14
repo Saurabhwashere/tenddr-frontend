@@ -4,6 +4,9 @@ import { Toaster } from 'sonner'
 import { CheckCircle2, AlertTriangle, MessageCircle, FileCheck, Clock, DollarSign, FileText } from 'lucide-react'
 import Link from 'next/link'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export default function UploadPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4">

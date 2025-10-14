@@ -2,6 +2,10 @@
 import Link from 'next/link'
 import { CheckCircle2, AlertTriangle, DollarSign, FileCheck, Clock, Shield, TrendingUp, FileText, ChevronRight, ArrowRight, Zap, Target, Users } from 'lucide-react'
 import { SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import { Suspense } from 'react'
+
+// Force dynamic rendering for Clerk components
+export const dynamic = 'force-dynamic'
 
 export default function LandingPage() {
   return (
@@ -61,20 +65,24 @@ export default function LandingPage() {
               
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-5 mb-8">
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3 group text-lg">
+                <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl"></div>}>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3 group text-lg">
+                        Analyze a Contract Free
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </SignInButton>
+                  </SignedOut>
+                </Suspense>
+                <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl"></div>}>
+                  <SignedIn>
+                    <Link href="/upload" className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3 group text-lg">
                       Analyze a Contract Free
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </SignInButton>
-                </SignedOut>
-                <SignedIn>
-                  <Link href="/upload" className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3 group text-lg">
-                    Analyze a Contract Free
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
-                </SignedIn>
+                  </SignedIn>
+                </Suspense>
                 <button className="px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-all border-2 border-blue-600 flex items-center justify-center gap-3 text-lg">
                   See how it works
                 </button>
@@ -281,18 +289,22 @@ export default function LandingPage() {
           </div>
           
           <div className="text-center">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
+            <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl mx-auto w-32"></div>}>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
+                    Try It Free
+                  </button>
+                </SignInButton>
+              </SignedOut>
+            </Suspense>
+            <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl mx-auto w-32"></div>}>
+              <SignedIn>
+                <Link href="/upload" className="inline-block px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
                   Try It Free
-                </button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <Link href="/upload" className="inline-block px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
-                Try It Free
-              </Link>
-            </SignedIn>
+                </Link>
+              </SignedIn>
+            </Suspense>
           </div>
         </div>
       </section>
@@ -488,18 +500,22 @@ export default function LandingPage() {
           </div>
           
           <div className="text-center mt-16">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
+            <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl mx-auto w-48"></div>}>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
+                    See The Difference Yourself
+                  </button>
+                </SignInButton>
+              </SignedOut>
+            </Suspense>
+            <Suspense fallback={<div className="px-10 py-4 bg-gray-200 animate-pulse rounded-xl mx-auto w-48"></div>}>
+              <SignedIn>
+                <Link href="/upload" className="inline-block px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
                   See The Difference Yourself
-                </button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <Link href="/upload" className="inline-block px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all text-lg">
-                See The Difference Yourself
-              </Link>
-            </SignedIn>
+                </Link>
+              </SignedIn>
+            </Suspense>
           </div>
         </div>
       </section>
@@ -546,20 +562,24 @@ export default function LandingPage() {
             Try our early access program—see what hidden risks are in your next contract. No credit card required.
           </p>
           
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button className="px-12 py-5 bg-blue-600 text-white text-xl font-bold rounded-xl hover:bg-blue-700 transition-all mb-12 inline-flex items-center gap-3">
+          <Suspense fallback={<div className="px-12 py-5 bg-gray-200 animate-pulse rounded-xl mb-12 mx-auto w-64"></div>}>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="px-12 py-5 bg-blue-600 text-white text-xl font-bold rounded-xl hover:bg-blue-700 transition-all mb-12 inline-flex items-center gap-3">
+                  Analyze Your Contract Free
+                  <ArrowRight className="w-6 h-6" />
+                </button>
+              </SignInButton>
+            </SignedOut>
+          </Suspense>
+          <Suspense fallback={<div className="px-12 py-5 bg-gray-200 animate-pulse rounded-xl mb-12 mx-auto w-64"></div>}>
+            <SignedIn>
+              <Link href="/upload" className="inline-flex items-center gap-3 px-12 py-5 bg-blue-600 text-white text-xl font-bold rounded-xl hover:bg-blue-700 transition-all mb-12">
                 Analyze Your Contract Free
                 <ArrowRight className="w-6 h-6" />
-              </button>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <Link href="/upload" className="inline-flex items-center gap-3 px-12 py-5 bg-blue-600 text-white text-xl font-bold rounded-xl hover:bg-blue-700 transition-all mb-12">
-              Analyze Your Contract Free
-              <ArrowRight className="w-6 h-6" />
-            </Link>
-          </SignedIn>
+              </Link>
+            </SignedIn>
+          </Suspense>
           
           {/* Trust Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-base text-slate-600 font-medium">
