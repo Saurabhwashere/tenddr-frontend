@@ -449,18 +449,18 @@ export default function LandingPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 <tr>
-                  <td className="p-6 font-semibold text-slate-900 text-base">Time</td>
+                  <td className="p-6 font-semibold text-slate-900 text-base">Ease of Use</td>
                   <td className="p-6 text-center bg-gradient-to-br from-blue-50 to-cyan-50">
                     <div className="flex items-center justify-center gap-2">
                       <Zap className="w-4 h-4 text-blue-600" />
-                      <span className="font-semibold text-blue-900">Minutes</span>
+                      <span className="font-semibold text-blue-900">No prompts required</span>
                     </div>
                   </td>
                   <td className="p-4 text-center text-slate-600">
-                    <Clock className="w-4 h-4 inline mr-1" />30-60 min per question
+                    Multiple prompts needed
                   </td>
                   <td className="p-4 text-center text-slate-600">
-                    <Clock className="w-4 h-4 inline mr-1" />Several hours
+                    Manual keyword searching
                   </td>
                 </tr>
                 <tr>
