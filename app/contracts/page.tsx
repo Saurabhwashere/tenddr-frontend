@@ -5,7 +5,8 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { API_URL } from '@/lib/config'
 import Link from 'next/link'
-import { FileText, Clock, AlertTriangle, Home } from 'lucide-react'
+import { FileText, Home } from 'lucide-react'
+import ContractsList from '@/components/ContractsList'
 
 // Fetch all contracts from backend
 async function getContracts() {
@@ -101,68 +102,7 @@ export default async function ContractsPage() {
           </div>
         ) : (
           /* Contracts Grid */
-          <div className="grid gap-4">
-            {contracts.map((contract: any) => (
-              <Link 
-                key={contract.id}
-                href={`/results/${contract.id}`}
-                className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all hover:scale-[1.01]"
-              >
-                <div className="flex items-start justify-between">
-                  {/* Left Side: Contract Info */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <FileText className="w-5 h-5 text-blue-600" />
-                      <h3 className="font-semibold text-gray-900 text-lg">
-                        {contract.filename}
-                      </h3>
-                    </div>
-                    
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      {/* Upload Date */}
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {formatDate(contract.uploaded_at)}
-                      </span>
-                      
-                      {/* Risk Level Badge */}
-                      {contract.risk_level && contract.risk_level !== 'unknown' && (
-                        <span className={`flex items-center gap-1 px-2 py-1 rounded font-medium ${
-                          contract.risk_level === 'critical' ? 'bg-red-100 text-red-700' :
-                          contract.risk_level === 'high' ? 'bg-orange-100 text-orange-700' :
-                          contract.risk_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-blue-100 text-blue-700'
-                        }`}>
-                          <AlertTriangle className="w-4 h-4" />
-                          {contract.risk_level} risk
-                        </span>
-                      )}
-                      
-                      {/* Questions Asked */}
-                      {contract.questions_asked > 0 && (
-                        <span className="text-gray-500">
-                          {contract.questions_asked} question{contract.questions_asked !== 1 ? 's' : ''} asked
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Right Side: Critical Risks Badge */}
-                  {contract.critical_risks > 0 && (
-                    <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-bold">
-                      {contract.critical_risks} Critical
-                    </div>
-                  )}
-                  
-                  {contract.high_risks > 0 && !contract.critical_risks && (
-                    <div className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-bold">
-                      {contract.high_risks} High
-                    </div>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ContractsList initialContracts={contracts} />
         )}
       </div>
     </main>

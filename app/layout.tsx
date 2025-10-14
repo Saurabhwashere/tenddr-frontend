@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import LoadingBar from '@/components/LoadingBar'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
     >
       <html lang="en">
         <body>
+          <LoadingBar />
           <header className="border-b bg-white shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center h-20">
