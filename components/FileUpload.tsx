@@ -4,6 +4,7 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
+import { useAuth } from '@clerk/nextjs'
 import { Upload, FileText, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { API_URL } from '@/lib/config'
@@ -14,6 +15,7 @@ export default function FileUpload() {
   const [progress, setProgress] = useState(0)
   const [stage, setStage] = useState<'idle' | 'uploading' | 'processing' | 'analyzing' | 'complete'>('idle')
   const router = useRouter()
+  const { getToken, isLoaded, isSignedIn } = useAuth()
   
   // Handle file drop
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -33,6 +35,12 @@ export default function FileUpload() {
   
   const handleUpload = async () => {
     if (!file) return
+    
+    // Check if user is authenticated
+    if (!isLoaded || !isSignedIn) {
+      toast.error('Please sign in to upload contracts')
+      return
+    }
     
     setLoading(true)
     setStage('uploading')
@@ -56,6 +64,9 @@ export default function FileUpload() {
     }, 1000) // Update every second
     
     try {
+      // Get Clerk authentication token
+      const token = await getToken()
+      
       // Update stage messages as time progresses
       setTimeout(() => {
         if (stage !== 'complete') setStage('processing')
@@ -65,9 +76,12 @@ export default function FileUpload() {
         if (stage !== 'complete') setStage('analyzing')
       }, 10000) // After 10 seconds
       
-      // Make the actual API call (this takes 3-5 minutes with hybrid LLM)
+      // Make the actual API call with authentication (this takes 2-3 minutes with optimizations)
       const res = await fetch(`${API_URL}/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '', // Include auth token
+        },
         body: formData
       })
       

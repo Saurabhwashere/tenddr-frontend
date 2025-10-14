@@ -1,5 +1,7 @@
 // Results page - Comprehensive Contract Analysis
 
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import ResultsView from '@/components/ResultsView'
 import { API_URL } from '@/lib/config'
 
@@ -23,6 +25,12 @@ async function getResults(id: string) {
 }
 
 export default async function ResultsPage({ params }: { params: { id: string } }) {
+  // Require authentication
+  const { userId } = await auth()
+  if (!userId) {
+    redirect('/sign-in')
+  }
+  
   const data = await getResults(params.id)
   
   // Handle error case with friendly message

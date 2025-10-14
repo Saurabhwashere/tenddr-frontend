@@ -1,6 +1,8 @@
 // Contracts List Page
 // Shows all uploaded contracts
 
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import { API_URL } from '@/lib/config'
 import Link from 'next/link'
 import { FileText, Clock, AlertTriangle, Home } from 'lucide-react'
@@ -40,6 +42,12 @@ function formatDate(dateString: string) {
 }
 
 export default async function ContractsPage() {
+  // Require authentication
+  const { userId } = await auth()
+  if (!userId) {
+    redirect('/sign-in')
+  }
+  
   const contracts = await getContracts()
   
   return (
