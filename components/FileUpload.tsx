@@ -15,7 +15,7 @@ export default function FileUpload() {
   const [progress, setProgress] = useState(0)
   const [stage, setStage] = useState<'idle' | 'uploading' | 'processing' | 'analyzing' | 'complete'>('idle')
   const router = useRouter()
-  const { getToken, isLoaded, isSignedIn } = useAuth()
+  const { getToken, isLoaded, isSignedIn, userId } = useAuth()
   
   // Handle file drop
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -76,11 +76,11 @@ export default function FileUpload() {
         if (stage !== 'complete') setStage('analyzing')
       }, 10000) // After 10 seconds
       
-      // Make the actual API call with authentication (this takes 2-3 minutes with optimizations)
+      // Make the actual API call with user ID (this takes 2-3 minutes with optimizations)
       const res = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         headers: {
-          'Authorization': token ? `Bearer ${token}` : '', // Include auth token
+          'X-User-Id': userId || '', // Pass Clerk user ID
         },
         body: formData
       })

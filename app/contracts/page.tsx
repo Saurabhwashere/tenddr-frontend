@@ -11,11 +11,14 @@ import ContractsList from '@/components/ContractsList'
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
 
-// Fetch all contracts from backend
-async function getContracts() {
+// Fetch contracts for authenticated user from backend
+async function getContracts(userId: string) {
   try {
     const res = await fetch(`${API_URL}/contracts`, { 
-      cache: 'no-store'  // Always get fresh data
+      cache: 'no-store',  // Always get fresh data
+      headers: {
+        'X-User-Id': userId
+      }
     })
     
     if (!res.ok) {
@@ -52,7 +55,7 @@ export default async function ContractsPage() {
     redirect('/sign-in')
   }
   
-  const contracts = await getContracts()
+  const contracts = await getContracts(userId)
   
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
