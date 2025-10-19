@@ -1,4 +1,5 @@
 // Landing Page - Public Marketing Page
+'use client'
 import Link from 'next/link'
 import { CheckCircle2, AlertTriangle, DollarSign, FileCheck, Clock, Shield, TrendingUp, FileText, ChevronRight, ArrowRight, Zap, Target, Users } from 'lucide-react'
 import { SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
@@ -83,7 +84,18 @@ export default function LandingPage() {
           </Link>
                   </SignedIn>
                 </Suspense>
-                <button className="px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-all border-2 border-blue-600 flex items-center justify-center gap-3 text-lg">
+                <button 
+                  onClick={() => {
+                    const element = document.getElementById('how-it-works')
+                    if (element) {
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      })
+                    }
+                  }}
+                  className="px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-all border-2 border-blue-600 flex items-center justify-center gap-3 text-lg hover:scale-105 transform"
+                >
                   See how it works
                 </button>
               </div>
@@ -237,7 +249,7 @@ export default function LandingPage() {
       </section>
 
       {/* 3-Step Process */}
-      <section className="py-24 bg-white">
+      <section id="how-it-works" className="py-24 bg-white scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
