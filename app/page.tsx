@@ -103,10 +103,12 @@ export default function LandingPage() {
               <p className="text-base text-slate-500 font-medium">
                 ✨ Join construction professionals validating their contracts with AI
               </p>
+              
             </div>
             
             {/* Right Column - Risk Dashboard Preview */}
             <div className="relative">
+              
               <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -243,6 +245,22 @@ export default function LandingPage() {
                   Non-compliance risks legal penalties
                 </li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Security Message */}
+      <section className="py-12 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-slate-200">
+            <div className="flex items-center justify-center gap-4 text-slate-700">
+              <Shield className="w-8 h-8 text-green-600" />
+              <div className="text-center">
+                <p className="text-lg font-semibold text-slate-900">
+                  We save your data securely, you can delete it anytime you want
+                </p>
+              </div>
             </div>
           </div>
         </div>
