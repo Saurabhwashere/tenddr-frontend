@@ -1,6 +1,6 @@
 // ResultsView component - Simple tabbed interface for contract analysis
-
 'use client'
+import { useAuth } from '@clerk/nextjs'
 import { useState } from 'react'
 import { Toaster, toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
@@ -42,6 +42,8 @@ export default function ResultsView({
   audit_trail,
   validation
 }: ResultsViewProps) {
+
+  const {userId} = useAuth()
   // Simple tab state - just a string!
   const [activeTab, setActiveTab] = useState('risks')  // Start with risk analysis
   
@@ -154,7 +156,10 @@ export default function ResultsView({
     try {
       const res = await fetch(`${API_URL}/qa/${contractId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-User-Id': userId || '' // Pass Clerk user ID
+        },
         body: JSON.stringify({ question: currentQuestion })
       })
       

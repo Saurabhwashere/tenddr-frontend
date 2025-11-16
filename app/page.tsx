@@ -30,11 +30,11 @@ export default function LandingPage() {
               </div>
               
               <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 mb-8 tracking-tight leading-tight">
-                Don't Sign a Contract Until You Know the Risks
+                Stop Wasting 30 Hours on Tenders You Shouldn't Bid On
               </h1>
               
               <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed font-normal">
-                AI-powered contract analysis helps identify hidden risks, compliance gaps, and financial exposure in minutes—not weeks.
+                Upload any tender contract. Get financial risk analysis, AS 4000 compliance check, and a bid/no-bid recommendation—in 2 minutes.
               </p>
               
               {/* Value Props */}
@@ -106,70 +106,109 @@ export default function LandingPage() {
               
             </div>
             
-            {/* Right Column - Risk Dashboard Preview */}
+            {/* Right Column - Before/After Screenshot */}
             <div className="relative">
               
-              <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-lg">40-50 Arncliffe St - D&C Agreement</h3>
-                    <p className="text-sm text-slate-500">Analysis completed 2 minutes ago</p>
+              {/* Before/After Container */}
+              <div className="space-y-6">
+                
+                {/* BEFORE Section */}
+                <div className="relative">
+                  <div className="absolute -top-3 left-4 z-10">
+                    <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">
+                      BEFORE
+                    </span>
                   </div>
-                  <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
-                    2 CRITICAL
-                  </span>
-        </div>
-        
-                {/* Critical Risks */}
-                <div className="space-y-4 mb-6">
-                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-bold text-red-900">Unlimited Liability</h4>
-                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                  <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 opacity-75">
+                    <div className="text-xs font-mono text-gray-600 leading-relaxed">
+                      <div className="mb-2 font-semibold">DESIGN AND CONSTRUCT AGREEMENT</div>
+                      <div className="space-y-1 text-gray-500">
+                        <div>8.3 LIABILITY AND INDEMNITY</div>
+                        <div>The Contractor shall indemnify and hold harmless the Principal against all claims, demands, proceedings, costs, charges, expenses, losses, damages and liabilities of whatsoever nature arising out of or in connection with the performance or non-performance of the Contract...</div>
+                        <div className="mt-3">10.1 LIQUIDATED DAMAGES</div>
+                        <div>If the Contractor fails to achieve Practical Completion by the Date for Practical Completion, the Contractor shall pay to the Principal liquidated damages at the rate of $15,000 per day for each day of delay...</div>
+                        <div className="mt-3">12.4 RETENTION</div>
+                        <div>The Principal may retain from each progress payment an amount equal to 5% of the value of work completed...</div>
+                      </div>
                     </div>
-                    <p className="text-sm text-red-700 mb-2">
-                      <span className="font-semibold">Location:</span> Section 8.3, Page 12
-                    </p>
-                    <p className="text-sm text-red-700 mb-2">
-                      <span className="font-semibold">Potential exposure:</span> Unlimited
-                    </p>
-                    <p className="text-sm text-red-900 font-semibold">
-                      💡 Recommendation: Cap at $2M
-          </p>
-        </div>
-        
-                  <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-bold text-orange-900">Liquidated Damages: $15k/day</h4>
-                      <DollarSign className="w-5 h-5 text-orange-600" />
+                    <div className="mt-4 flex items-center gap-2 text-gray-400">
+                      <span className="text-2xl">❓</span>
+                      <span className="text-sm font-medium">What does this mean for my business?</span>
                     </div>
-                    <p className="text-sm text-orange-700 mb-1">
-                      <span className="font-semibold">Location:</span> Section 10.1, Page 18
-                    </p>
-                    <p className="text-sm text-orange-700 mb-2">
-                      3x industry standard ($5k/day) • 30-day delay: <span className="font-bold">$450k</span>
-                    </p>
-                    <p className="text-sm text-orange-900 font-semibold">
-                      💡 Recommendation: Reduce to $8k/day max
-                    </p>
+                  </div>
+                </div>
+
+                {/* Arrow */}
+                <div className="flex justify-center">
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+
+                {/* AFTER Section */}
+                <div className="relative">
+                  <div className="absolute -top-3 left-4 z-10">
+                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+                      AFTER
+                    </span>
+                  </div>
+                  <div className="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-slate-900 text-lg">Risk Analysis Complete</h3>
+                        <p className="text-sm text-slate-500">Analysis completed in 2 minutes</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                          HIGH RISK
+                        </span>
+                        <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                          DON'T BID
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Key Risks */}
+                    <div className="space-y-3 mb-4">
+                      <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-bold text-red-900 text-sm">Unlimited Liability</h4>
+                          <AlertTriangle className="w-4 h-4 text-red-600" />
+                        </div>
+                        <p className="text-xs text-red-700">
+                          <span className="font-semibold">Exposure:</span> Unlimited • <span className="font-semibold">Recommendation:</span> Cap at $2M
+                        </p>
+                      </div>
+                      
+                      <div className="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-bold text-orange-900 text-sm">Liquidated Damages: $15k/day</h4>
+                          <DollarSign className="w-4 h-4 text-orange-600" />
+                        </div>
+                        <p className="text-xs text-orange-700">
+                          <span className="font-semibold">Risk:</span> 3x industry standard • <span className="font-semibold">30-day delay cost:</span> $450k
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Summary Stats */}
+                    <div className="grid grid-cols-3 gap-2 pt-3 border-t">
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-red-600">5</div>
+                        <div className="text-xs text-slate-600">HIGH RISKS</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-blue-600">8</div>
+                        <div className="text-xs text-slate-600">MEDIUM</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-green-600">34</div>
+                        <div className="text-xs text-slate-600">COMPLIANT</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Summary Stats */}
-                <div className="grid grid-cols-3 gap-3 pt-4 border-t">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600">5</div>
-                    <div className="text-xs text-slate-600">HIGH RISKS</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">8</div>
-                    <div className="text-xs text-slate-600">MEDIUM</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-cyan-600">34</div>
-                    <div className="text-xs text-slate-600">COMPLIANT</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
