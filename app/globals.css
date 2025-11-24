@@ -55,3 +55,74 @@
 .animate-smoothPulse {
   animation: smoothPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* ContraVault-style Split View */
+.split-view-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  gap: 0;
+}
+
+/* Custom Scrollbar Styling */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Answer Section Styling */
+.answer-section h3 {
+  @apply text-lg font-bold text-emerald-800 mt-6 mb-3;
+}
+
+.answer-section ul {
+  @apply list-disc ml-6 space-y-2;
+}
+
+.answer-section p {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+
+/* Smooth transitions for split view */
+.split-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* PDF viewer container */
+.pdf-container {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+/* Emerald gradient for branding */
+.gradient-emerald {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* Focus styles for accessibility */
+input:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Responsive split view - stack on mobile */
+@media (max-width: 768px) {
+  .split-view-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

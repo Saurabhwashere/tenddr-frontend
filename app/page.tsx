@@ -34,7 +34,7 @@ export default function LandingPage() {
               </h1>
               
               <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed font-normal">
-                Upload any tender contract. Get financial risk analysis, AS 4000 compliance check, and a bid/no-bid recommendation—in 2 minutes.
+                Upload any tender packages. Get financial risk analysis, AS 4000 compliance check, and a bid/no-bid recommendation—in 2 minutes.
               </p>
               
               {/* Value Props */}
@@ -231,7 +231,7 @@ export default function LandingPage() {
               <ul className="space-y-3 text-slate-600">
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  Manual contract review takes 6+ hours
+                  Manual document review takes 6+ hours
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />

@@ -1,8 +1,8 @@
-// Results page - Comprehensive Contract Analysis
+// Results page - Comprehensive Contract Analysis with Split View
 
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
-import ResultsView from '@/components/ResultsView'
+import SplitViewResults from '@/components/SplitViewResults'
 import { API_URL } from '@/lib/config'
 
 async function getResults(id: string) {
@@ -60,21 +60,5 @@ export default async function ResultsPage({ params }: { params: { id: string } }
     )
   }
   
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
-      <ResultsView
-        contractId={data.id}
-        filename={data.filename}
-        riskAnalysis={data.risk_analysis}
-        compliance_checklist={data.compliance_checklist}
-        clause_summaries={data.clause_summaries}
-        scope_alignment={data.scope_alignment}
-        completeness_check={data.completeness_check}
-        timeline_milestones={data.timeline_milestones}
-        financial_risks={data.financial_risks}
-        audit_trail={data.audit_trail}
-        validation={data.validation}
-      />
-    </main>
-  )
+  return <SplitViewResults contract={data} />
 }
