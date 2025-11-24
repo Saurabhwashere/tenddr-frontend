@@ -12,6 +12,15 @@ interface SplitViewResultsProps {
   contract: any
 }
 
+interface OverviewTopic {
+  id: string
+  title: string
+  question: string
+  summary: string
+  pageNumbers: string[]
+  loading: boolean
+}
+
 export default function SplitViewResults({ contract }: SplitViewResultsProps) {
   const { userId } = useAuth()
   const [question, setQuestion] = useState('')
@@ -22,7 +31,7 @@ export default function SplitViewResults({ contract }: SplitViewResultsProps) {
   const [zoom, setZoom] = useState(100)
 
   // Overview state - initialize from backend data if available
-  const [overviewTopics, setOverviewTopics] = useState(
+  const [overviewTopics, setOverviewTopics] = useState<OverviewTopic[]>(
     contract.contract_overview?.topics && contract.contract_overview.topics.length > 0
       ? contract.contract_overview.topics.map((topic: any) => ({
           ...topic,
@@ -119,8 +128,8 @@ export default function SplitViewResults({ contract }: SplitViewResultsProps) {
       
       // Extract all page numbers from answer
       const pageMatches = answer.match(/\[Page (\d+)\]/g)
-      const pageNumbers = pageMatches 
-        ? Array.from(new Set(pageMatches.map((m: string) => m.match(/\d+/)?.[0] || ''))).filter(Boolean)
+      const pageNumbers: string[] = pageMatches 
+        ? Array.from(new Set(pageMatches.map((m: string) => m.match(/\d+/)?.[0] || ''))).filter(Boolean) as string[]
         : []
       
       // Remove page references for summarization
